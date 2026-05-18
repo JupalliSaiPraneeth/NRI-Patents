@@ -129,8 +129,8 @@ const Home = () => {
     // Initial 3D card states — VERTICAL flip uses rotateX
     // heroCard  starts flat (rotateX: 0)
     // tableCard starts flipped upward behind (rotateX: -180)
-    gsap.set(heroCardRef.current, { rotateX: 0, transformOrigin: 'center center' });
-    gsap.set(tableCardRef.current, { rotateX: -180, transformOrigin: 'center center' });
+    gsap.set(heroCardRef.current, { rotateX: 0, transformOrigin: 'center center', visibility: 'visible', opacity: 1 });
+    gsap.set(tableCardRef.current, { rotateX: -180, transformOrigin: 'center center', visibility: 'hidden', opacity: 0 });
     // Perspective on the scene for depth
     gsap.set(flipSceneRef.current, { perspective: 1200 });
 
@@ -146,11 +146,11 @@ const Home = () => {
         anticipatePin: 1,
         onUpdate: (self) => {
           if (self.progress > 0.5) {
-            gsap.set(heroCardRef.current, { pointerEvents: 'none' });
-            gsap.set(tableCardRef.current, { pointerEvents: 'auto' });
+            gsap.set(heroCardRef.current, { pointerEvents: 'none', visibility: 'hidden', opacity: 0 });
+            gsap.set(tableCardRef.current, { pointerEvents: 'auto', visibility: 'visible', opacity: 1 });
           } else {
-            gsap.set(heroCardRef.current, { pointerEvents: 'auto' });
-            gsap.set(tableCardRef.current, { pointerEvents: 'none' });
+            gsap.set(heroCardRef.current, { pointerEvents: 'auto', visibility: 'visible', opacity: 1 });
+            gsap.set(tableCardRef.current, { pointerEvents: 'none', visibility: 'hidden', opacity: 0 });
           }
         }
       },
