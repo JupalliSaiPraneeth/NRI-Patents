@@ -1,0 +1,4 @@
+Faculty Name,Email,Department,Designation,Category,Patent ID,Patent Title,Author Pos.,Co-Applicants,Type
+"Dr. A. Kumar","akumar@college.edu","CSE","Professor","OC","IN202301234","AI-based Smart Traffic Management System","1","B. Rao, C. Singh","Published"
+"Dr. S. Reddy","sreddy@college.edu","ECE","Associate Professor","BC","IN202305678","Low Power IoT Sensor Node Design","1","D. Mehta","Granted"
+"Prof. R. Sharma","rsharma@college.edu","MECH","Assistant Professor","SC","IN202309999","Renewable Energy Harvesting Device","2","E. Patel, F. Nair","Filed"
