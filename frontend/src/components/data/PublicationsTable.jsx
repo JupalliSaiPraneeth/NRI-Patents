@@ -297,14 +297,14 @@ const PatentPreviewModal = ({ patent, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* ── TOP NAV BAR ── */}
-        <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200/80">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#b20e0e]/10 text-[#b20e0e]">
-              <ShieldCheck size={20} />
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 bg-white border-b border-slate-200/80">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center bg-[#b20e0e]/10 text-[#b20e0e] shrink-0">
+              <ShieldCheck size={18} />
             </div>
             <div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Institutional Registry</span>
-              <h2 className="text-sm font-black text-[#1a1a1a] tracking-tight -mt-0.5">Patent Verification Profile</h2>
+              <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 block">Institutional Registry</span>
+              <h2 className="text-xs sm:text-sm font-black text-[#1a1a1a] tracking-tight -mt-0.5">Patent Verification Profile</h2>
             </div>
           </div>
           <button 
@@ -316,10 +316,10 @@ const PatentPreviewModal = ({ patent, onClose }) => {
         </div>
 
         {/* ── MAIN BODY GRID ── */}
-        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
           
           {/* ── LEFT PANE: PATENT METADATA ── */}
-          <div className="w-full lg:w-[42%] p-6 lg:p-8 overflow-y-auto border-r border-slate-200/80 bg-white flex flex-col justify-between">
+          <div className="w-full lg:w-[42%] p-5 sm:p-6 lg:p-8 overflow-y-visible lg:overflow-y-auto border-b lg:border-b-0 lg:border-r border-slate-200/80 bg-white flex flex-col justify-between shrink-0">
             <div className="space-y-6">
               {/* Badge & Type */}
               <div className="flex items-center gap-3 stagger-item">
@@ -454,11 +454,11 @@ const PatentPreviewModal = ({ patent, onClose }) => {
           </div>
 
           {/* ── RIGHT PANE: DOCUMENT VIEW FRAME ── */}
-          <div className="flex-1 p-6 lg:p-8 flex flex-col overflow-hidden" ref={viewerPanelRef}>
+          <div className="w-full lg:flex-1 p-5 sm:p-6 lg:p-8 flex flex-col min-h-[400px] lg:min-h-0 shrink-0 lg:shrink overflow-hidden" ref={viewerPanelRef}>
             
             {/* Document Select Tabs */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-2 p-1 bg-slate-200/60 rounded-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div className="flex flex-wrap gap-2 p-1 bg-slate-200/60 rounded-xl">
                 <button
                   onClick={() => setActiveTab('publish')}
                   disabled={!publishUrl}
@@ -484,7 +484,7 @@ const PatentPreviewModal = ({ patent, onClose }) => {
               </div>
 
               {currentPdfUrl && (
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#16a34a] flex items-center gap-1.5 bg-emerald-50 border border-emerald-200/50 px-3 py-1 rounded-full">
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#16a34a] flex items-center gap-1.5 bg-emerald-50 border border-emerald-200/50 px-3 py-1 rounded-full w-fit">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] animate-pulse" /> Verified Document
                 </span>
               )}
