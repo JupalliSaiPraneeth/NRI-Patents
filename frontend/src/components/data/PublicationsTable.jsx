@@ -664,6 +664,7 @@ const PublicationsTable = ({
   const pageData = filtered.slice((page - 1) * rowsPerPage, page * rowsPerPage);
   const handleDelete = (id) => { setAllData(prev => prev.filter(r => r.id !== id)); setDeleteId(null); };
   const activeFilters = Object.values(filters).filter(v => v?.trim()).length;
+  const totalWidth = 42 + COLUMNS.reduce((acc, col) => acc + col.minW, 0) + (showActions && (isAuthenticated || isAdmin) ? 80 : 0);
 
   /* ── Uniform cell padding — matches reference screenshot ── */
   const cellPx = 'px-3 py-3';   // 12px horizontal, 12px vertical — tight & uniform
@@ -759,7 +760,7 @@ const PublicationsTable = ({
             className={`overflow-auto custom-scrollbar ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
             style={{ WebkitOverflowScrolling: 'touch', maxHeight: '600px' }}>
 
-            <table className="w-full border-collapse" style={{ tableLayout: 'fixed' }}>
+            <table className="border-collapse" style={{ tableLayout: 'fixed', width: `${totalWidth}px` }}>
 
               {/* ── colgroup: drives uniform column widths ── */}
               <colgroup>
