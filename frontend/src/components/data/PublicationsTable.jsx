@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Trash2, Edit, Search, Download, ChevronLeft, ChevronRight,
   X, Filter, SlidersHorizontal, FileText, Award,
@@ -952,11 +953,12 @@ const PublicationsTable = ({
       </div>
 
       {/* ── PATENT PREVIEW MODAL ── */}
-      {selectedPatent && (
+      {selectedPatent && createPortal(
         <PatentPreviewModal 
           patent={selectedPatent} 
           onClose={() => setSelectedPatent(null)} 
-        />
+        />,
+        document.body
       )}
     </>
   );
