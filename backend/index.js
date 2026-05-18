@@ -107,16 +107,18 @@ app.use('/uploads', express.static(uploadsDir, {
 import { db, dbReady } from "./db.js";
 await dbReady; // Wait for database to be ready
 
-const isLocalOrigin = (origin) => {
+const isAllowedOrigin = (origin) => {
   if (!origin) return true;
-  // Match localhost, LAN IPs, OR any Ngrok domains
-  return /^(http|https):\/\/(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+)(:\d+)?$/.test(origin) || origin.includes('ngrok');
+  // Match localhost, LAN IPs, Ngrok domains, OR Vercel deployments
+  const isLocal = /^(http|https):\/\/(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+)(:\d+)?$/.test(origin) || origin.includes('ngrok');
+  const isVercel = origin.endsWith('.vercel.app');
+  return isLocal || isVercel;
 };
 
 const corsOptions = {
   origin: (origin, callback) => {
     // Check if origin is allowed
-    const allowed = !origin || isLocalOrigin(origin) || (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL);
+    const allowed = !origin || isAllowedOrigin(origin) || (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL);
 
     if (allowed) {
       callback(null, true);
