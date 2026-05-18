@@ -148,6 +148,9 @@ const Home = () => {
     });
 
     // Phase A: Hero folds upward (0° → 90° = edge-on, invisible)
+    flipTl.set(heroCardRef.current, { pointerEvents: 'auto', zIndex: 2 }, 0);
+    flipTl.set(tableCardRef.current, { pointerEvents: 'none', zIndex: 1 }, 0);
+
     flipTl.to(heroCardRef.current, {
       rotateX: 90,
       duration: 0.45,
@@ -167,6 +170,10 @@ const Home = () => {
       duration: 0.3,
       ease: 'none',
     }, 0.50);
+
+    // Swap interactivity when the flip completes
+    flipTl.set(heroCardRef.current, { pointerEvents: 'none', zIndex: 1 }, 0.50);
+    flipTl.set(tableCardRef.current, { pointerEvents: 'auto', zIndex: 2 }, 0.50);
 
     // Table content snaps in right as card lands
     flipTl.from('.table-reveal', {
