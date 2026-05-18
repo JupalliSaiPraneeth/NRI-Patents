@@ -18,6 +18,13 @@ const Home = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const containerRef = useRef(null);
   const heroBgRef = useRef(null);
@@ -37,14 +44,19 @@ const Home = () => {
 
   const handleGoExplore = () => {
     const st = ScrollTrigger.getById('flip-trigger');
-    if (st) {
+    if (st && !isMobile) {
       gsap.to(window, {
         scrollTo: st.end,
         duration: 1,
         ease: 'power2.inOut'
       });
     } else {
-      window.scrollBy({ top: window.innerHeight * 2, behavior: 'smooth' });
+      const target = document.getElementById('patents-table');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+      }
     }
   };
 
@@ -127,6 +139,14 @@ const Home = () => {
          4. Table content reveals with stagger
     ══════════════════════════════════════════════════ */
 
+    if (isMobile) {
+      // Clear 3D flip card styles so they stack naturally in HTML flow on mobile devices
+      gsap.set(heroCardRef.current, { clearProps: 'all' });
+      gsap.set(tableCardRef.current, { clearProps: 'all' });
+      gsap.set('.table-reveal', { clearProps: 'all' });
+      return;
+    }
+
     // Initial 3D card states — VERTICAL flip uses rotateX
     // heroCard  starts flat (rotateX: 0)
     // tableCard starts flipped upward behind (rotateX: -180)
@@ -179,7 +199,7 @@ const Home = () => {
       ease: 'power2.out',
     }, 0.70);
 
-  }, { scope: containerRef });
+  }, { scope: containerRef, dependencies: [isMobile] });
 
   return (
     <div ref={containerRef} className="min-h-screen flex flex-col bg-[#f4f4f0]">
@@ -334,12 +354,12 @@ const Home = () => {
         */}
         <div
           ref={flipWrapperRef}
-          className="relative w-full overflow-hidden"
-          style={{ height: '100vh' }}
+          className={isMobile ? "relative w-full" : "relative w-full overflow-hidden"}
+          style={{ height: isMobile ? 'auto' : '100vh' }}
         >
           {/* ── Mid-flip background — NRI logo fills the entire viewport as bg ── */}
           <div
-            className="absolute inset-0 z-0 overflow-hidden"
+            className={isMobile ? "hidden" : "absolute inset-0 z-0 overflow-hidden"}
             style={{ background: '#f4f4f0' }}
           >
             {/* NRI Logo as a giant centered background watermark */}
@@ -371,15 +391,15 @@ const Home = () => {
           {/* 3D perspective scene */}
           <div
             ref={flipSceneRef}
-            className="relative w-full h-full"
-            style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
+            className={isMobile ? "relative w-full h-auto flex flex-col bg-[#f4f4f0]" : "relative w-full h-full"}
+            style={isMobile ? {} : { transformStyle: 'preserve-3d', willChange: 'transform' }}
           >
 
             {/* ════════ FACE — HERO VIDEO ════════ */}
             <div
               ref={heroCardRef}
-              className="absolute inset-0 w-full h-full"
-              style={{
+              className={isMobile ? "relative w-full h-screen" : "absolute inset-0 w-full h-full"}
+              style={isMobile ? {} : {
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
                 transformStyle: 'preserve-3d',
@@ -604,8 +624,8 @@ const Home = () => {
             {/* ════════ BACK — PUBLICATIONS TABLE ════════ */}
             <div
               ref={tableCardRef}
-              className="absolute top-0 left-0 w-full min-h-full"
-              style={{
+              className={isMobile ? "relative w-full h-auto mt-6" : "absolute top-0 left-0 w-full min-h-full"}
+              style={isMobile ? { background: '#f4f4f0' } : {
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
                 transformStyle: 'preserve-3d',

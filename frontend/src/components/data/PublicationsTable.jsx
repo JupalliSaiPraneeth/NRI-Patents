@@ -796,7 +796,7 @@ const PublicationsTable = ({
                 {pageData.length === 0 ? (
                   <tr>
                     <td colSpan={COLUMNS.length + 2} className="text-center py-20">
-                      <div className="flex flex-col items-center gap-4">
+                      <div className="sticky left-0 flex flex-col items-center justify-center gap-4 w-full max-w-[90vw] md:max-w-[500px] mx-auto">
                         <div className="w-16 h-16 rounded-2xl flex items-center justify-center"
                           style={{ background: 'rgba(178,14,14,0.08)', border: '2px dashed rgba(178,14,14,0.2)' }}>
                           <FileText size={24} className="text-[#b20e0e]/40" />
