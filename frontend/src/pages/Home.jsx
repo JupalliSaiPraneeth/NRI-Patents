@@ -660,7 +660,7 @@ const Home = () => {
                     </div>
                   </div>
 
-                  <div className="table-reveal min-h-[600px] pb-16">
+                  <div className="table-reveal min-h-[800px] pb-28">
                     <PublicationsTable showActions={false} />
                   </div>
                 </div>
@@ -670,6 +670,9 @@ const Home = () => {
           </div>{/* /flipScene */}
         </div>{/* /flipWrapper */}
       </main>
+
+      {/* Dynamic bottom spacer to push black footer down and blend with card background */}
+      <div className="h-28 bg-[#f4f4f0] w-full" />
 
       <Footer />
 
