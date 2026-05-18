@@ -167,12 +167,14 @@ const renderCell = (row, key) => {
   const val = row[key] || '—';
 
   if (key === 'facultyName') return (
-    <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-black text-white shadow-sm"
-        style={{ background: 'linear-gradient(135deg,#1a1a1a,#444)' }}>
+    <div className="flex items-center gap-3 group/fac cursor-pointer">
+      <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-black text-white shadow-sm transition-all duration-200 group-hover/fac:scale-105 group-hover/fac:shadow-md"
+        style={{ background: 'linear-gradient(135deg,#b20e0e,#d41515)' }}>
         {val[0].toUpperCase()}
       </div>
-      <span className="text-base font-black text-[#1a1a1a] truncate">{val}</span>
+      <span className="text-base font-black text-[#1a1a1a] group-hover/fac:text-[#b20e0e] group-hover/fac:underline decoration-2 transition-colors duration-150 truncate">
+        {val}
+      </span>
     </div>
   );
 
