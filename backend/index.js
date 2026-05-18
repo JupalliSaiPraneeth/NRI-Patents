@@ -186,7 +186,7 @@ app.use((err, req, res, next) => {
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Running at 0.0.0.0:${port}`);
-  
+
   // Initialize Automated Backups
   // Runs every 3 days at 3:00 AM server time
   console.log('⏰ Scheduling automated backups for 03:00 AM every 3 days.');
