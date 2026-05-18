@@ -139,11 +139,11 @@ const Home = () => {
         id: 'flip-trigger',
         trigger: flipWrapperRef.current,
         start: 'top top',
-        end: '+=40%',         // ← tiny scroll = full flip in one small wheel tick
-        scrub: 0.2,           // ← almost zero lag; sticks right to scroll
+        end: '+=40%',         // ← short pin duration
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
+        toggleActions: 'play none none reverse',
         onUpdate: (self) => {
           if (self.progress > 0.5) {
             gsap.set(heroCardRef.current, { pointerEvents: 'none', visibility: 'hidden', opacity: 0 });
@@ -160,14 +160,18 @@ const Home = () => {
     flipTl.to(heroCardRef.current, {
       rotateX: 180,
       duration: 0.8,
-      ease: 'none',
+      ease: 'power2.inOut',
     }, 0);
 
     flipTl.to(tableCardRef.current, {
       rotateX: 0,
       duration: 0.8,
-      ease: 'none',
+      ease: 'power2.inOut',
     }, 0);
+
+    // Exact timeline midpoint state swaps
+    flipTl.set(heroCardRef.current, { pointerEvents: 'none', visibility: 'hidden', opacity: 0 }, 0.4);
+    flipTl.set(tableCardRef.current, { pointerEvents: 'auto', visibility: 'visible', opacity: 1 }, 0.4);
 
     // Table content snaps in right as card lands
     flipTl.from('.table-reveal', {
