@@ -726,6 +726,8 @@ const PublicationsTable = ({
               </div>
             </div>
           </div>
+        )}
+
         {/* ── PATENT PREVIEW MODAL ── */}
         {selectedPatent && (
           <PatentPreviewModal 
