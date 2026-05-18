@@ -146,11 +146,11 @@ const Home = () => {
         anticipatePin: 1,
         onUpdate: (self) => {
           if (self.progress > 0.5) {
-            gsap.set(heroCardRef.current, { pointerEvents: 'none', zIndex: 1 });
-            gsap.set(tableCardRef.current, { pointerEvents: 'auto', zIndex: 2 });
+            gsap.set(heroCardRef.current, { pointerEvents: 'none' });
+            gsap.set(tableCardRef.current, { pointerEvents: 'auto' });
           } else {
-            gsap.set(heroCardRef.current, { pointerEvents: 'auto', zIndex: 2 });
-            gsap.set(tableCardRef.current, { pointerEvents: 'none', zIndex: 1 });
+            gsap.set(heroCardRef.current, { pointerEvents: 'auto' });
+            gsap.set(tableCardRef.current, { pointerEvents: 'none' });
           }
         }
       },
@@ -159,32 +159,32 @@ const Home = () => {
     // Phase A: Hero folds upward (0° → 90° = edge-on, invisible)
     flipTl.to(heroCardRef.current, {
       rotateX: 90,
-      duration: 0.45,
-      ease: 'power3.in',
+      duration: 0.35,
+      ease: 'power2.in',
     }, 0);
 
     // Phase B: Table unfolds downward into full view (90° → 0°)
     flipTl.to(tableCardRef.current, {
       rotateX: 0,
-      duration: 0.55,
-      ease: 'power3.out',
-    }, 0.45);
+      duration: 0.45,
+      ease: 'power2.out',
+    }, 0.30);
 
     // Hero finishes its arc off-screen (90° → 180°)
     flipTl.to(heroCardRef.current, {
       rotateX: 180,
-      duration: 0.3,
+      duration: 0.2,
       ease: 'none',
-    }, 0.50);
+    }, 0.35);
 
     // Table content snaps in right as card lands
     flipTl.from('.table-reveal', {
-      y: 16,
+      y: 10,
       opacity: 0,
-      stagger: 0.025,
-      duration: 0.15,
-      ease: 'expo.out',
-    }, 0.82);
+      stagger: 0.015,
+      duration: 0.12,
+      ease: 'power2.out',
+    }, 0.65);
 
   }, { scope: containerRef });
 
@@ -391,7 +391,6 @@ const Home = () => {
                 WebkitBackfaceVisibility: 'hidden',
                 transformStyle: 'preserve-3d',
                 willChange: 'transform',
-                zIndex: 2,
               }}
             >
               <section
@@ -618,7 +617,6 @@ const Home = () => {
                 WebkitBackfaceVisibility: 'hidden',
                 transformStyle: 'preserve-3d',
                 willChange: 'transform',
-                zIndex: 1,
                 background: '#f4f4f0',
               }}
             >
