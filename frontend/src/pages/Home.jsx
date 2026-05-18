@@ -430,7 +430,7 @@ const Home = () => {
                       type="video/mp4"
                     />
                   </video>
- 
+
                   {/* Blur overlay (fades on entrance) */}
                   <div
                     ref={blurOverlayRef}
@@ -441,7 +441,7 @@ const Home = () => {
                       background: 'rgba(10,10,20,0.55)',
                     }}
                   />
- 
+
                   {/* Gradient overlay */}
                   <div
                     ref={overlayRef}
@@ -451,7 +451,7 @@ const Home = () => {
                         'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 50%, rgba(20,20,20,0.75) 100%)',
                     }}
                   />
- 
+
                   {/* Vignette */}
                   <div
                     className="absolute inset-0 z-20 pointer-events-none"
@@ -461,11 +461,11 @@ const Home = () => {
                     }}
                   />
                 </div>
- 
+
                 {/* ── Hero Content ── */}
                 <div className="container mx-auto px-4 relative z-30 pt-16 sm:pt-24 pb-12 sm:pb-16">
                   <div className="max-w-5xl mx-auto text-center">
- 
+
                     {/* Badge */}
                     <div
                       className="hero-badge inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 sm:mb-10"
@@ -480,7 +480,7 @@ const Home = () => {
                         Official Research Portal
                       </span>
                     </div>
- 
+
                     {/* Headline (each line is independently animated) */}
                     <div className="mb-6 sm:mb-10 overflow-hidden">
                       <h1 className="font-black tracking-tighter leading-none">
@@ -510,7 +510,7 @@ const Home = () => {
                         </div>
                       </h1>
                     </div>
- 
+
                     {/* Sub-description */}
                     <p
                       className="hero-line text-xs sm:text-base md:text-lg text-white/65 mb-8 sm:mb-14 max-w-2xl mx-auto leading-relaxed font-medium"
@@ -519,7 +519,7 @@ const Home = () => {
                       Explore the extensive catalog of patents, publications, and research
                       breakthroughs achieved by the faculty at Dr. RVR NRI Institute of Technology.
                     </p>
- 
+
                     {/* CTAs */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 sm:mb-20">
                       <div className="relative hero-cta">

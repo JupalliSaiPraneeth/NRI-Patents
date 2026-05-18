@@ -253,21 +253,21 @@ const PatentPreviewModal = ({ patent, onClose }) => {
 
   useEffect(() => {
     // Entrance Animations
-    gsap.fromTo(backdropRef.current, 
-      { opacity: 0 }, 
+    gsap.fromTo(backdropRef.current,
+      { opacity: 0 },
       { opacity: 1, duration: 0.35, ease: 'power2.out' }
     );
-    gsap.fromTo(modalRef.current, 
-      { scale: 0.9, y: 30, opacity: 0 }, 
+    gsap.fromTo(modalRef.current,
+      { scale: 0.9, y: 30, opacity: 0 },
       { scale: 1, y: 0, opacity: 1, duration: 0.45, ease: 'back.out(1.15)' }
     );
-    gsap.fromTo('.stagger-item', 
-      { x: -20, opacity: 0 }, 
+    gsap.fromTo('.stagger-item',
+      { x: -20, opacity: 0 },
       { x: 0, opacity: 1, stagger: 0.04, duration: 0.4, ease: 'power2.out', delay: 0.15 }
     );
     if (viewerPanelRef.current) {
-      gsap.fromTo(viewerPanelRef.current, 
-        { x: 30, opacity: 0 }, 
+      gsap.fromTo(viewerPanelRef.current,
+        { x: 30, opacity: 0 },
         { x: 0, opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.25 }
       );
     }
@@ -280,17 +280,17 @@ const PatentPreviewModal = ({ patent, onClose }) => {
   };
 
   return (
-    <div 
+    <div
       ref={backdropRef}
       className="fixed inset-0 z-[250] flex items-center justify-center p-4 lg:p-6"
       style={{ background: 'rgba(15,15,20,0.65)', backdropFilter: 'blur(16px)' }}
       onClick={handleClose}
     >
-      <div 
+      <div
         ref={modalRef}
         className="w-full max-w-6xl h-[90vh] lg:h-[85vh] rounded-3xl overflow-hidden flex flex-col"
-        style={{ 
-          background: '#f8f8f6', 
+        style={{
+          background: '#f8f8f6',
           boxShadow: '0 40px 120px rgba(0,0,0,0.4)',
           border: '1px solid rgba(0,0,0,0.06)'
         }}
@@ -307,7 +307,7 @@ const PatentPreviewModal = ({ patent, onClose }) => {
               <h2 className="text-xs sm:text-sm font-black text-[#1a1a1a] tracking-tight -mt-0.5">Patent Verification Profile</h2>
             </div>
           </div>
-          <button 
+          <button
             onClick={handleClose}
             className="w-9 h-9 rounded-xl flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors"
           >
@@ -317,13 +317,13 @@ const PatentPreviewModal = ({ patent, onClose }) => {
 
         {/* ── MAIN BODY GRID ── */}
         <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
-          
+
           {/* ── LEFT PANE: PATENT METADATA ── */}
           <div className="w-full lg:w-[42%] p-5 sm:p-6 lg:p-8 overflow-y-visible lg:overflow-y-auto border-b lg:border-b-0 lg:border-r border-slate-200/80 bg-white flex flex-col justify-between shrink-0">
             <div className="space-y-6">
               {/* Badge & Type */}
               <div className="flex items-center gap-3 stagger-item">
-                <span 
+                <span
                   className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider"
                   style={{
                     background: patent.approvalType === 'Granted' ? 'rgba(217,119,6,0.1)' : 'rgba(37,99,235,0.1)',
@@ -345,7 +345,7 @@ const PatentPreviewModal = ({ patent, onClose }) => {
 
               {/* Staggered Metadata List */}
               <div className="space-y-4 pt-2">
-                
+
                 {/* Inventors */}
                 <div className="stagger-item flex items-start gap-4">
                   <div className="p-2.5 rounded-xl bg-slate-100 text-slate-500 mt-0.5">
@@ -432,7 +432,7 @@ const PatentPreviewModal = ({ patent, onClose }) => {
             {/* Action Buttons */}
             {currentPdfUrl && (
               <div className="stagger-item flex gap-3 pt-6 border-t border-slate-100 mt-8">
-                <a 
+                <a
                   href={currentPdfUrl}
                   target="_blank"
                   rel="noreferrer"
@@ -440,7 +440,7 @@ const PatentPreviewModal = ({ patent, onClose }) => {
                 >
                   <ExternalLink size={14} /> Open in New Tab
                 </a>
-                <a 
+                <a
                   href={currentPdfUrl}
                   download
                   className="flex-1 py-3 px-4 rounded-xl font-black text-xs text-white hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
@@ -455,29 +455,27 @@ const PatentPreviewModal = ({ patent, onClose }) => {
 
           {/* ── RIGHT PANE: DOCUMENT VIEW FRAME ── */}
           <div className="w-full lg:flex-1 p-5 sm:p-6 lg:p-8 flex flex-col min-h-[400px] lg:min-h-0 shrink-0 lg:shrink overflow-hidden" ref={viewerPanelRef}>
-            
+
             {/* Document Select Tabs */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div className="flex flex-wrap gap-2 p-1 bg-slate-200/60 rounded-xl">
                 <button
                   onClick={() => setActiveTab('publish')}
                   disabled={!publishUrl}
-                  className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${
-                    activeTab === 'publish'
+                  className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${activeTab === 'publish'
                       ? 'bg-white text-slate-900 shadow-sm'
                       : 'text-slate-500 hover:text-slate-800 disabled:opacity-40 disabled:cursor-not-allowed'
-                  }`}
+                    }`}
                 >
                   Proof of Publication
                 </button>
                 <button
                   onClick={() => setActiveTab('grant')}
                   disabled={!grantUrl}
-                  className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${
-                    activeTab === 'grant'
+                  className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${activeTab === 'grant'
                       ? 'bg-white text-slate-900 shadow-sm'
                       : 'text-slate-500 hover:text-slate-800 disabled:opacity-40 disabled:cursor-not-allowed'
-                  }`}
+                    }`}
                 >
                   Proof of Grant
                 </button>
@@ -493,7 +491,7 @@ const PatentPreviewModal = ({ patent, onClose }) => {
             {/* Embedded Iframe Previewer */}
             <div className="flex-1 bg-white rounded-2xl border border-slate-200/80 shadow-inner overflow-hidden relative flex items-center justify-center">
               {currentPdfUrl ? (
-                <iframe 
+                <iframe
                   src={currentPdfUrl}
                   title="Patent Document Viewer"
                   className="w-full h-full border-none"
@@ -955,9 +953,9 @@ const PublicationsTable = ({
 
       {/* ── PATENT PREVIEW MODAL ── */}
       {selectedPatent && createPortal(
-        <PatentPreviewModal 
-          patent={selectedPatent} 
-          onClose={() => setSelectedPatent(null)} 
+        <PatentPreviewModal
+          patent={selectedPatent}
+          onClose={() => setSelectedPatent(null)}
         />,
         document.body
       )}
