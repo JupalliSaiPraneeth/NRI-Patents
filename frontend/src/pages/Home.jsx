@@ -388,7 +388,7 @@ const Home = () => {
             >
               <section
                 ref={heroSectionRef}
-                className="relative w-full h-full flex items-center overflow-hidden"
+                className="relative w-full h-full flex items-center pt-24 sm:pt-0 overflow-hidden"
               >
                 {/* ── Video BG ── */}
                 <div
@@ -410,7 +410,7 @@ const Home = () => {
                       type="video/mp4"
                     />
                   </video>
-
+ 
                   {/* Blur overlay (fades on entrance) */}
                   <div
                     ref={blurOverlayRef}
@@ -421,7 +421,7 @@ const Home = () => {
                       background: 'rgba(10,10,20,0.55)',
                     }}
                   />
-
+ 
                   {/* Gradient overlay */}
                   <div
                     ref={overlayRef}
@@ -431,7 +431,7 @@ const Home = () => {
                         'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 50%, rgba(20,20,20,0.75) 100%)',
                     }}
                   />
-
+ 
                   {/* Vignette */}
                   <div
                     className="absolute inset-0 z-20 pointer-events-none"
@@ -441,14 +441,14 @@ const Home = () => {
                     }}
                   />
                 </div>
-
+ 
                 {/* ── Hero Content ── */}
-                <div className="container mx-auto px-4 relative z-30 pt-24 pb-16">
+                <div className="container mx-auto px-4 relative z-30 pt-16 sm:pt-24 pb-12 sm:pb-16">
                   <div className="max-w-5xl mx-auto text-center">
-
+ 
                     {/* Badge */}
                     <div
-                      className="hero-badge inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-10"
+                      className="hero-badge inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 sm:mb-10"
                       style={{
                         background: 'rgba(178,14,14,0.18)',
                         border: '1px solid rgba(178,14,14,0.4)',
@@ -460,18 +460,18 @@ const Home = () => {
                         Official Research Portal
                       </span>
                     </div>
-
+ 
                     {/* Headline (each line is independently animated) */}
-                    <div className="mb-10 overflow-hidden">
+                    <div className="mb-6 sm:mb-10 overflow-hidden">
                       <h1 className="font-black tracking-tighter leading-none">
                         <div
-                          className="hero-line text-5xl md:text-7xl lg:text-[88px] text-white mb-1 drop-shadow-2xl"
+                          className="hero-line text-4xl sm:text-7xl lg:text-[88px] text-white mb-1 drop-shadow-2xl font-black"
                           style={{ textShadow: '0 4px 30px rgba(0,0,0,0.5)' }}
                         >
                           Explore Our
                         </div>
                         <div
-                          className="hero-line text-5xl md:text-7xl lg:text-[88px] mb-2"
+                          className="hero-line text-4xl sm:text-7xl lg:text-[88px] mb-2 font-black"
                           style={{
                             background: 'linear-gradient(135deg, #ff6b6b 0%, #ff4444 40%, #ffb347 100%)',
                             WebkitBackgroundClip: 'text',
@@ -483,25 +483,25 @@ const Home = () => {
                           Innovations
                         </div>
                         <div
-                          className="hero-line text-3xl md:text-4xl lg:text-5xl text-white/80 font-bold"
+                          className="hero-line text-xl sm:text-4xl lg:text-5xl text-white/80 font-bold mt-1 sm:mt-0"
                           style={{ textShadow: '0 2px 20px rgba(0,0,0,0.4)', letterSpacing: '-0.02em' }}
                         >
                           &amp; Find Your Research Legacy
                         </div>
                       </h1>
                     </div>
-
+ 
                     {/* Sub-description */}
                     <p
-                      className="hero-line text-base md:text-lg text-white/65 mb-14 max-w-2xl mx-auto leading-relaxed font-medium"
+                      className="hero-line text-xs sm:text-base md:text-lg text-white/65 mb-8 sm:mb-14 max-w-2xl mx-auto leading-relaxed font-medium"
                       style={{ textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}
                     >
                       Explore the extensive catalog of patents, publications, and research
                       breakthroughs achieved by the faculty at Dr. RVR NRI Institute of Technology.
                     </p>
-
+ 
                     {/* CTAs */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 sm:mb-20">
                       <div className="relative hero-cta">
                         <div
                           className="cta-glow absolute inset-0 rounded-2xl blur-xl pointer-events-none"
