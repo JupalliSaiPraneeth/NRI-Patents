@@ -592,10 +592,12 @@ const PublicationsTable = ({
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftSt, setScrollLeftState] = useState(0);
+  const dragDistance = useRef(0);
 
   const handleMouseDown = (e) => {
     if (e.button !== 0) return;
     setIsDragging(true);
+    dragDistance.current = 0;
     setStartX(e.pageX - scrollRef.current.offsetLeft);
     setScrollLeftState(scrollRef.current.scrollLeft);
   };
@@ -606,6 +608,7 @@ const PublicationsTable = ({
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX) * 2;
+    dragDistance.current = Math.abs(walk);
     scrollRef.current.scrollLeft = scrollLeftSt - walk;
   };
 
@@ -755,7 +758,7 @@ const PublicationsTable = ({
             className={`overflow-auto custom-scrollbar ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
             style={{ WebkitOverflowScrolling: 'touch', maxHeight: '600px' }}>
 
-            <table className="w-full border-collapse" style={{ tableLayout: 'fixed', pointerEvents: isDragging ? 'none' : 'auto' }}>
+            <table className="w-full border-collapse" style={{ tableLayout: 'fixed' }}>
 
               {/* ── colgroup: drives uniform column widths ── */}
               <colgroup>
@@ -811,6 +814,7 @@ const PublicationsTable = ({
                   return (
                     <tr key={row.id}
                       onClick={() => {
+                        if (dragDistance.current > 10) return;
                         if (onRowClick) {
                           onRowClick(row);
                         } else {
