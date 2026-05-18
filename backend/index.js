@@ -60,6 +60,7 @@ app.use((req, res, next) => {
 
 app.use(helmet({
   crossOriginEmbedderPolicy: false,
+  frameguard: false, // Allow framing from frontend port
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
@@ -68,7 +69,8 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "https:"],
       objectSrc: ["'self'"],
       mediaSrc: ["'self'"],
-      frameSrc: ["'self'"]
+      frameSrc: ["'self'", "*"],
+      frameAncestors: ["'self'", "*"] // Allow frontend origin to frame PDFs
     }
   }
 }));
