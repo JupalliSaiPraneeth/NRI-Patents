@@ -9,14 +9,17 @@ export const getBaseUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
   
-  // If accessing through Ngrok or a public production URL, the backend is hosting the frontend directly.
-  // We should NOT append :3000, we should just use the exact same origin (port 443/80).
-  if (window.location.hostname.includes('ngrok') || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.hostname.startsWith('192.168.'))) {
-    return window.location.origin;
+  // If we are running in development/local environment, use the local backend.
+  // Otherwise, use the production Render backend URL.
+  const isLocal = window.location.hostname === 'localhost' || 
+                  window.location.hostname === '127.0.0.1' || 
+                  window.location.hostname.startsWith('192.168.');
+                  
+  if (isLocal) {
+    return `http://${window.location.hostname}:3000`;
   }
   
-  // Fallback for local Vite development (where frontend is on 5173 and backend is on 3000)
-  return `http://${window.location.hostname}:3000`;
+  return 'https://nri-patents-2.onrender.com';
 };
 
 const api = axios.create({
