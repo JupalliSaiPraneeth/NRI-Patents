@@ -593,9 +593,11 @@ const PublicationsTable = ({
                   return (
                     <tr key={row.id}
                       onClick={() => {
+                        console.log('Row clicked:', row);
                         if (onRowClick) {
                           onRowClick(row);
                         } else {
+                          console.log('Setting selectedPatent:', row);
                           setSelectedPatent(row);
                         }
                       }}
