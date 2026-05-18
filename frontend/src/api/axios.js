@@ -8,17 +8,17 @@ export const getBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
-  
+
   // If we are running in development/local environment, use the local backend.
   // Otherwise, use the production Render backend URL.
-  const isLocal = window.location.hostname === 'localhost' || 
-                  window.location.hostname === '127.0.0.1' || 
-                  window.location.hostname.startsWith('192.168.');
-                  
+  const isLocal = window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname.startsWith('192.168.');
+
   if (isLocal) {
     return `http://${window.location.hostname}:3000`;
   }
-  
+
   return 'https://nri-patents-2.onrender.com';
 };
 
