@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   Trash2, Edit, Search, Download, ChevronLeft, ChevronRight,
-  X, Filter, SlidersHorizontal, FileText, Award
+  X, Filter, SlidersHorizontal, FileText, Award,
+  Eye, Calendar, User, Building2, Globe, FileCheck, ExternalLink, ShieldCheck, MapPin
 } from 'lucide-react';
-import api from '../../api/axios';
+import api, { getBaseUrl } from '../../api/axios';
 import { gsap } from 'gsap';
 
 /* ══════════════════════════════════════════════════════
@@ -232,79 +233,294 @@ const renderCell = (row, key) => {
   return <span className="text-sm text-slate-900 font-bold whitespace-nowrap">{val}</span>;
 };
 
-// Cell renderer and other helpers removed for brevity...
-
 /* ══════════════════════════════════════════════════════
-   MAIN COMPONENT
+   GSAP-ANIMATED EXTRAORDINARY PATENT PREVIEW MODAL
+   Featuring fully-featured dual-pane metadata & PDF viewer
 ══════════════════════════════════════════════════════ */
 const PatentPreviewModal = ({ patent, onClose }) => {
   const backdropRef = useRef(null);
   const modalRef = useRef(null);
+  const viewerPanelRef = useRef(null);
+  const [activeTab, setActiveTab] = useState('publish'); // 'publish' or 'grant'
+
+  const baseUrl = getBaseUrl();
+  const publishUrl = patent.documentLink ? `${baseUrl}${patent.documentLink}` : null;
+  const grantUrl = patent.grantDocumentLink ? `${baseUrl}${patent.grantDocumentLink}` : null;
+  const currentPdfUrl = activeTab === 'publish' ? publishUrl : grantUrl;
 
   useEffect(() => {
-    if (!patent) return;
-    const ctx = gsap.context(() => {
-      gsap.fromTo(backdropRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' });
-      gsap.fromTo(modalRef.current, { opacity: 0, scale: 0.9, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: 'back.out(1.15)' });
-      gsap.fromTo('.patent-meta-item', { opacity: 0, x: -15 }, { opacity: 1, x: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out', delay: 0.15 });
-    });
-    return () => ctx.revert();
-  }, [patent]);
+    // Entrance Animations
+    gsap.fromTo(backdropRef.current, 
+      { opacity: 0 }, 
+      { opacity: 1, duration: 0.35, ease: 'power2.out' }
+    );
+    gsap.fromTo(modalRef.current, 
+      { scale: 0.9, y: 30, opacity: 0 }, 
+      { scale: 1, y: 0, opacity: 1, duration: 0.45, ease: 'back.out(1.15)' }
+    );
+    gsap.fromTo('.stagger-item', 
+      { x: -20, opacity: 0 }, 
+      { x: 0, opacity: 1, stagger: 0.04, duration: 0.4, ease: 'power2.out', delay: 0.15 }
+    );
+    if (viewerPanelRef.current) {
+      gsap.fromTo(viewerPanelRef.current, 
+        { x: 30, opacity: 0 }, 
+        { x: 0, opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.25 }
+      );
+    }
+  }, []);
 
   const handleClose = () => {
-    gsap.to(modalRef.current, { opacity: 0, scale: 0.92, y: 20, duration: 0.25, ease: 'power2.in', onComplete: onClose });
-    gsap.to(backdropRef.current, { opacity: 0, duration: 0.2 });
+    const tl = gsap.timeline({ onComplete: onClose });
+    tl.to(modalRef.current, { scale: 0.92, y: 25, opacity: 0, duration: 0.25, ease: 'power2.in' });
+    tl.to(backdropRef.current, { opacity: 0, duration: 0.2 }, 0.05);
   };
 
-  if (!patent) return null;
-  const backendBase = api.defaults.baseURL || 'https://nri-patents-2.onrender.com';
-  const docUrl = patent.documentLink ? (patent.documentLink.startsWith('http') ? patent.documentLink : `${backendBase}${patent.documentLink.startsWith('/') ? '' : '/'}${patent.documentLink}`) : null;
-
   return (
-    <div ref={backdropRef} className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md">
-      <div ref={modalRef} className="relative w-full max-w-5xl h-[85vh] bg-[#f4f4f0] rounded-2xl shadow-2xl border border-black/10 flex flex-col md:flex-row overflow-hidden" onClick={e => e.stopPropagation()}>
-        <div className="absolute top-0 left-0 right-0 h-1 bg-[#b20e0e] z-10" />
-        <button onClick={handleClose} className="absolute right-4 top-4 z-20 p-2 text-slate-500 hover:text-slate-800 hover:bg-black/5 rounded-xl transition-all"><X size={20} /></button>
-        <div className="w-full md:w-[42%] p-6 md:p-8 flex flex-col justify-between overflow-y-auto border-r border-black/5">
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1 border border-black/5 shadow-sm"><Award size={22} className="text-[#b20e0e]" /></div>
-              <div><h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#b20e0e]">NRI Institute</h4><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Office of Patent & Research</p></div>
+    <div 
+      ref={backdropRef}
+      className="fixed inset-0 z-[250] flex items-center justify-center p-4 lg:p-6"
+      style={{ background: 'rgba(15,15,20,0.65)', backdropFilter: 'blur(16px)' }}
+      onClick={handleClose}
+    >
+      <div 
+        ref={modalRef}
+        className="w-full max-w-6xl h-[90vh] lg:h-[85vh] rounded-3xl overflow-hidden flex flex-col"
+        style={{ 
+          background: '#f8f8f6', 
+          boxShadow: '0 40px 120px rgba(0,0,0,0.4)',
+          border: '1px solid rgba(0,0,0,0.06)'
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* ── TOP NAV BAR ── */}
+        <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200/80">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#b20e0e]/10 text-[#b20e0e]">
+              <ShieldCheck size={20} />
             </div>
-            <div className="space-y-3">
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/5 text-[#1a1a1a] border border-black/10">{patent.patentType || 'Utility'}</span>
-              <h3 className="text-xl md:text-2xl font-black text-[#1a1a1a] leading-tight tracking-tight">{patent.patentTitle}</h3>
-            </div>
-            <div className="space-y-4">
-              <div className="patent-meta-item flex flex-col p-3.5 bg-white border border-black/5 rounded-xl shadow-sm"><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Faculty Name</span><span className="text-sm font-black text-[#1a1a1a]">{patent.facultyName}</span></div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="patent-meta-item flex flex-col p-3.5 bg-white border border-black/5 rounded-xl shadow-sm"><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Patent ID</span><span className="text-xs font-black text-[#1a1a1a] font-mono tracking-wider">{patent.patentId || '—'}</span></div>
-                <div className="patent-meta-item flex flex-col p-3.5 bg-white border border-black/5 rounded-xl shadow-sm"><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Department</span><span className="text-xs font-black text-[#1a1a1a]">{patent.department || '—'}</span></div>
-              </div>
-              <div className="patent-meta-item flex flex-col p-3.5 bg-white border border-black/5 rounded-xl shadow-sm"><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Co-Applicants</span><span className="text-xs text-slate-700 font-semibold leading-relaxed">{patent.coApplicants || 'None listed'}</span></div>
-              <div className="grid grid-cols-2 gap-3">
-                {patent.filingDate && <div className="patent-meta-item flex flex-col p-3.5 bg-white border border-black/5 rounded-xl shadow-sm"><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Filing Date</span><span className="text-xs font-black text-[#1a1a1a]">{patent.filingDate}</span></div>}
-                {patent.publishingDate && <div className="patent-meta-item flex flex-col p-3.5 bg-white border border-black/5 rounded-xl shadow-sm"><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Publishing Date</span><span className="text-xs font-black text-[#1a1a1a]">{patent.publishingDate}</span></div>}
-              </div>
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Institutional Registry</span>
+              <h2 className="text-sm font-black text-[#1a1a1a] tracking-tight -mt-0.5">Patent Verification Profile</h2>
             </div>
           </div>
-          <div className="pt-6 border-t border-black/5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Verified Institution Patent Registry</div>
+          <button 
+            onClick={handleClose}
+            className="w-9 h-9 rounded-xl flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors"
+          >
+            <X size={18} />
+          </button>
         </div>
-        <div className="w-full md:w-[58%] h-full bg-slate-900 flex items-center justify-center relative">
-          {docUrl ? (
-            <iframe src={`${docUrl}#toolbar=0&navpanes=0`} className="w-full h-full border-none" title="Patent Document Preview" />
-          ) : (
-            <div className="text-center p-8 flex flex-col items-center gap-4 text-white/40">
-              <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center"><FileText size={24} /></div>
-              <div><p className="font-black text-sm uppercase tracking-wider text-white/60">No Document Preview Available</p><p className="text-xs text-white/30 mt-1 max-w-[280px] mx-auto leading-relaxed">The original publication document has not been uploaded to this registry.</p></div>
+
+        {/* ── MAIN BODY GRID ── */}
+        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+          
+          {/* ── LEFT PANE: PATENT METADATA ── */}
+          <div className="w-full lg:w-[42%] p-6 lg:p-8 overflow-y-auto border-r border-slate-200/80 bg-white flex flex-col justify-between">
+            <div className="space-y-6">
+              {/* Badge & Type */}
+              <div className="flex items-center gap-3 stagger-item">
+                <span 
+                  className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider"
+                  style={{
+                    background: patent.approvalType === 'Granted' ? 'rgba(217,119,6,0.1)' : 'rgba(37,99,235,0.1)',
+                    color: patent.approvalType === 'Granted' ? '#d97706' : '#2563eb',
+                    border: patent.approvalType === 'Granted' ? '1px solid rgba(217,119,6,0.2)' : '1px solid rgba(37,99,235,0.2)'
+                  }}
+                >
+                  {patent.approvalType || 'Published'}
+                </span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  {patent.patentType || 'Utility'} Patent
+                </span>
+              </div>
+
+              {/* Title */}
+              <h1 className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight leading-tight stagger-item">
+                {patent.patentTitle}
+              </h1>
+
+              {/* Staggered Metadata List */}
+              <div className="space-y-4 pt-2">
+                
+                {/* Inventors */}
+                <div className="stagger-item flex items-start gap-4">
+                  <div className="p-2.5 rounded-xl bg-slate-100 text-slate-500 mt-0.5">
+                    <User size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Inventors & Authors</h3>
+                    <p className="text-sm font-black text-slate-800 mt-0.5">{patent.facultyName}</p>
+                    {patent.authors && (
+                      <p className="text-xs font-bold text-slate-500 mt-1">Authors: {patent.authors}</p>
+                    )}
+                    {patent.coApplicants && (
+                      <p className="text-xs font-bold text-slate-400 mt-0.5">Co-Applicants: {patent.coApplicants}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Patent ID / App Number */}
+                <div className="stagger-item flex items-start gap-4">
+                  <div className="p-2.5 rounded-xl bg-slate-100 text-slate-500 mt-0.5">
+                    <FileCheck size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Patent ID / App Number</h3>
+                    <p className="text-sm font-black text-slate-800 tracking-wider mt-0.5" style={{ fontFamily: 'monospace' }}>
+                      {patent.patentId}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Institution & Department */}
+                <div className="stagger-item flex items-start gap-4">
+                  <div className="p-2.5 rounded-xl bg-slate-100 text-slate-500 mt-0.5">
+                    <Building2 size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Department</h3>
+                    <p className="text-sm font-black text-slate-800 mt-0.5">
+                      Department of {patent.department}
+                    </p>
+                    <p className="text-[10px] font-bold text-slate-400 mt-0.5 uppercase tracking-wider">
+                      Dr. RVR NRI Institute of Technology
+                    </p>
+                  </div>
+                </div>
+
+                {/* Timeline dates */}
+                <div className="stagger-item flex items-start gap-4">
+                  <div className="p-2.5 rounded-xl bg-slate-100 text-slate-500 mt-0.5">
+                    <Calendar size={16} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+                    <div>
+                      <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Filing Date</h3>
+                      <p className="text-xs font-black text-slate-700 mt-0.5">{patent.filingDate || '—'}</p>
+                    </div>
+                    <div>
+                      <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Publish Date</h3>
+                      <p className="text-xs font-black text-slate-700 mt-0.5">{patent.publishingDate || '—'}</p>
+                    </div>
+                    {patent.grantingDate && (
+                      <div className="col-span-2 mt-1">
+                        <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Granting Date</h3>
+                        <p className="text-xs font-black text-emerald-600 mt-0.5">Granted: {patent.grantingDate}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Country */}
+                <div className="stagger-item flex items-start gap-4">
+                  <div className="p-2.5 rounded-xl bg-slate-100 text-slate-500 mt-0.5">
+                    <Globe size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Country of Origin</h3>
+                    <p className="text-sm font-black text-slate-800 mt-0.5">{patent.country || 'India'}</p>
+                  </div>
+                </div>
+
+              </div>
             </div>
-          )}
+
+            {/* Action Buttons */}
+            {currentPdfUrl && (
+              <div className="stagger-item flex gap-3 pt-6 border-t border-slate-100 mt-8">
+                <a 
+                  href={currentPdfUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 py-3 px-4 rounded-xl font-black text-xs text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-200"
+                >
+                  <ExternalLink size={14} /> Open in New Tab
+                </a>
+                <a 
+                  href={currentPdfUrl}
+                  download
+                  className="flex-1 py-3 px-4 rounded-xl font-black text-xs text-white hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
+                  style={{ background: 'linear-gradient(135deg,#b20e0e,#d41515)', boxShadow: '0 4px 16px rgba(178,14,14,0.3)' }}
+                >
+                  <Download size={14} /> Download Proof
+                </a>
+              </div>
+            )}
+
+          </div>
+
+          {/* ── RIGHT PANE: DOCUMENT VIEW FRAME ── */}
+          <div className="flex-1 p-6 lg:p-8 flex flex-col overflow-hidden" ref={viewerPanelRef}>
+            
+            {/* Document Select Tabs */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex gap-2 p-1 bg-slate-200/60 rounded-xl">
+                <button
+                  onClick={() => setActiveTab('publish')}
+                  disabled={!publishUrl}
+                  className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${
+                    activeTab === 'publish'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800 disabled:opacity-40 disabled:cursor-not-allowed'
+                  }`}
+                >
+                  Proof of Publication
+                </button>
+                <button
+                  onClick={() => setActiveTab('grant')}
+                  disabled={!grantUrl}
+                  className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${
+                    activeTab === 'grant'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800 disabled:opacity-40 disabled:cursor-not-allowed'
+                  }`}
+                >
+                  Proof of Grant
+                </button>
+              </div>
+
+              {currentPdfUrl && (
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#16a34a] flex items-center gap-1.5 bg-emerald-50 border border-emerald-200/50 px-3 py-1 rounded-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] animate-pulse" /> Verified Document
+                </span>
+              )}
+            </div>
+
+            {/* Embedded Iframe Previewer */}
+            <div className="flex-1 bg-white rounded-2xl border border-slate-200/80 shadow-inner overflow-hidden relative flex items-center justify-center">
+              {currentPdfUrl ? (
+                <iframe 
+                  src={currentPdfUrl}
+                  title="Patent Document Viewer"
+                  className="w-full h-full border-none"
+                />
+              ) : (
+                /* Sleek institutional placeholder when no proof PDF is uploaded */
+                <div className="text-center p-8 max-w-sm">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4 border border-slate-200">
+                    <FileText size={28} className="text-slate-400" />
+                  </div>
+                  <h3 className="text-lg font-black text-slate-800">No Document File Available</h3>
+                  <p className="text-xs text-slate-400 font-medium leading-relaxed mt-2">
+                    This patent entry has been successfully verified on the institutional database, but no PDF proof of publication or grant has been uploaded for preview.
+                  </p>
+                </div>
+              )}
+            </div>
+
+          </div>
+
         </div>
+
       </div>
     </div>
   );
 };
 
+/* ══════════════════════════════════════════════════════
+   MAIN COMPONENT
+══════════════════════════════════════════════════════ */
 const PublicationsTable = ({
   showActions = true,
   isAuthenticated = false,
@@ -593,11 +809,9 @@ const PublicationsTable = ({
                   return (
                     <tr key={row.id}
                       onClick={() => {
-                        console.log('Row clicked:', row);
                         if (onRowClick) {
                           onRowClick(row);
                         } else {
-                          console.log('Setting selectedPatent:', row);
                           setSelectedPatent(row);
                         }
                       }}
@@ -729,15 +943,15 @@ const PublicationsTable = ({
             </div>
           </div>
         )}
-
-        {/* ── PATENT PREVIEW MODAL ── */}
-        {selectedPatent && (
-          <PatentPreviewModal 
-            patent={selectedPatent} 
-            onClose={() => setSelectedPatent(null)} 
-          />
-        )}
       </div>
+
+      {/* ── PATENT PREVIEW MODAL ── */}
+      {selectedPatent && (
+        <PatentPreviewModal 
+          patent={selectedPatent} 
+          onClose={() => setSelectedPatent(null)} 
+        />
+      )}
     </>
   );
 };
