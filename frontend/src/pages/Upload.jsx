@@ -21,6 +21,10 @@ const Upload = () => {
   const hasUnsavedChanges = useRef(false);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
+  useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (hasUnsavedChanges.current) {
         e.preventDefault();
