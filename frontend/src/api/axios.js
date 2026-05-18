@@ -11,12 +11,20 @@ export const getBaseUrl = () => {
 
   // If we are running in development/local environment, use the local backend.
   // Otherwise, use the production Render backend URL.
-  const isLocal = window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1' ||
-    window.location.hostname.startsWith('192.168.');
+  const hostname = window.location.hostname;
+  const isLocal = hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname.startsWith('192.168.') ||
+    hostname.startsWith('10.') ||
+    (hostname.startsWith('172.') && (() => {
+      const parts = hostname.split('.');
+      if (parts.length < 2) return false;
+      const secondPart = parseInt(parts[1], 10);
+      return secondPart >= 16 && secondPart <= 31;
+    })());
 
   if (isLocal) {
-    return `http://${window.location.hostname}:3000`;
+    return `http://${hostname}:3000`;
   }
 
   return 'https://nri-patents-2.onrender.com';
