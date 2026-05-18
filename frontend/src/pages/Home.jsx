@@ -156,35 +156,27 @@ const Home = () => {
       },
     });
 
-    // Phase A: Hero folds upward (0° → 90° = edge-on, invisible)
-    flipTl.to(heroCardRef.current, {
-      rotateX: 90,
-      duration: 0.35,
-      ease: 'power2.in',
-    }, 0);
-
-    // Phase B: Table unfolds downward into full view (90° → 0°)
-    flipTl.to(tableCardRef.current, {
-      rotateX: 0,
-      duration: 0.45,
-      ease: 'power2.out',
-    }, 0.30);
-
-    // Hero finishes its arc off-screen (90° → 180°)
+    // Synchronous 3D flip card rotation in perfect unison
     flipTl.to(heroCardRef.current, {
       rotateX: 180,
-      duration: 0.2,
+      duration: 0.8,
       ease: 'none',
-    }, 0.35);
+    }, 0);
+
+    flipTl.to(tableCardRef.current, {
+      rotateX: 0,
+      duration: 0.8,
+      ease: 'none',
+    }, 0);
 
     // Table content snaps in right as card lands
     flipTl.from('.table-reveal', {
       y: 10,
       opacity: 0,
       stagger: 0.015,
-      duration: 0.12,
+      duration: 0.15,
       ease: 'power2.out',
-    }, 0.65);
+    }, 0.70);
 
   }, { scope: containerRef });
 
