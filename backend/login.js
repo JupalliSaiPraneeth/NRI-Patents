@@ -61,6 +61,7 @@ router.post("/", async (req, res) => {
       await logAction(normalizedEmail, "LOGIN", "Successful login as super_admin (default)");
 
       return res.status(200).json({
+        token,
         user: {
           email: normalizedEmail,
           role: 'super_admin',
@@ -128,6 +129,7 @@ router.post("/", async (req, res) => {
 
     // Return token and user data for immediate state loading (no token returned since it's in the cookie)
     return res.status(200).json({
+      token,
       user: {
         email: admin.email,
         role: admin.role,

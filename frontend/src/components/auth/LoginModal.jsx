@@ -22,7 +22,10 @@ const LoginModal = ({ isOpen, onClose }) => {
         password
       });
 
-      const { user } = response.data;
+      const { user, token } = response.data;
+      if (token) {
+        localStorage.setItem('token', token);
+      }
       login(user);
 
       setEmail('');

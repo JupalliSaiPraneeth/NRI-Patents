@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }) => {
     } catch (e) {
       console.error('Logout error completely removing remote cookie', e);
     } finally {
+      localStorage.removeItem('token');
       setIsAuthenticated(false);
       setUser(null);
     }
