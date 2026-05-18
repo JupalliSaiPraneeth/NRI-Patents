@@ -91,9 +91,10 @@ const Home = () => {
     entryTl.to('.hero-line', { y: 0, opacity: 1, duration: 0.9, stagger: 0.18, ease: 'expo.out' }, 1.8);
 
     // CTAs slide from opposite sides
-    entryTl
-      .to('.hero-cta', { x: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.3)' }, 2.8)
-      .to('.hero-cta-secondary', { x: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.3)' }, 2.95);
+    entryTl.to('.hero-cta', { x: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.3)' }, 2.8);
+    if (document.querySelector('.hero-cta-secondary')) {
+      entryTl.to('.hero-cta-secondary', { x: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.3)' }, 2.95);
+    }
 
     // Stat cards stagger up
     entryTl.to('.floating-card', { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'expo.out' }, 3.1);
