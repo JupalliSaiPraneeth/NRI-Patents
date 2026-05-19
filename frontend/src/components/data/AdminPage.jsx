@@ -119,7 +119,7 @@ const AdminPage = () => {
     const fetchLogs = async (page = 1, withAnimation = false) => {
         try {
             if (withAnimation) setIsRefreshing(true);
-            const response = await api.get(`/admin/logs?page=${page}&limit=11`);
+            const response = await api.get(`/admin/logs?page=${page}&limit=14`);
             setLogs(response.data.logs);
             setTotalPages(response.data.totalPages);
             setLogPage(page);
@@ -481,7 +481,7 @@ const AdminPage = () => {
                                     ))
                                 )}
                             </div>
-                            
+
                             {/* Admin List Pagination */}
                             <div className="p-4 border-t border-[rgba(0,0,0,0.06)] bg-[#f4f4f0]/50">
                                 <NumericPagination
@@ -493,25 +493,25 @@ const AdminPage = () => {
                             </div>
                         </motion.div>
 
-                        <SystemActions 
-                            isSuperAdmin={isSuperAdmin()} 
-                            handleManualBackup={handleManualBackup} 
-                            isBackingUp={isBackingUp} 
-                            api={api} 
-                            toast={toast} 
-                            fetchLogs={fetchLogs} 
-                            fetchStats={fetchStats} 
+                        <SystemActions
+                            isSuperAdmin={isSuperAdmin()}
+                            handleManualBackup={handleManualBackup}
+                            isBackingUp={isBackingUp}
+                            api={api}
+                            toast={toast}
+                            fetchLogs={fetchLogs}
+                            fetchStats={fetchStats}
                         />
                     </div>
 
                     {/* Right Column: Activity Logs */}
                     <div className="xl:col-span-2 flex flex-col">
-                        <AuditLogsTable 
-                            logs={logs} 
-                            fetchLogs={fetchLogs} 
-                            logPage={logPage} 
-                            totalPages={totalPages} 
-                            isRefreshing={isRefreshing} 
+                        <AuditLogsTable
+                            logs={logs}
+                            fetchLogs={fetchLogs}
+                            logPage={logPage}
+                            totalPages={totalPages}
+                            isRefreshing={isRefreshing}
                         />
                     </div>
                 </div>
