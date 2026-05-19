@@ -8,7 +8,7 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_8px_40px_rgba(0,0,0,0.08)] flex flex-col h-[680px] overflow-hidden relative z-10 w-full"
+            className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_8px_40px_rgba(0,0,0,0.08)] flex flex-col flex-1 h-full overflow-hidden relative z-10 w-full"
         >
             <div className="p-6 border-b border-[rgba(0,0,0,0.07)] flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#f4f4f0]/50">
                 <div className="flex items-center gap-3">
