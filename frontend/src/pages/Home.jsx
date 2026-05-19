@@ -84,7 +84,9 @@ const Home = () => {
     gsap.set('.hero-line', { y: 60, opacity: 0 });
     gsap.set('.hero-badge', { y: 30, opacity: 0, scale: 0.9 });
     gsap.set('.hero-cta', { x: -50, opacity: 0 });
-    gsap.set('.hero-cta-secondary', { x: 50, opacity: 0 });
+    if (document.querySelector('.hero-cta-secondary')) {
+      gsap.set('.hero-cta-secondary', { x: 50, opacity: 0 });
+    }
     gsap.set('.floating-card', { y: 40, opacity: 0 });
 
     // Ken Burns zoom

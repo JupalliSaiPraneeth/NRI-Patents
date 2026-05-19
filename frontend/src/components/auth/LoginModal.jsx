@@ -32,7 +32,7 @@ const LoginModal = ({ isOpen, onClose }) => {
       setPassword('');
       onClose();
     } catch (err) {
-      console.error('Login error:', err);
+      console.error('Login error:', err.message || err);
       const status = err.response?.status;
       const message = err.response?.data?.message || 'Login failed.';
 
