@@ -104,6 +104,14 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
                                 );
                             })
                         )}
+                        {logs.length > 0 && logs.length < 12 && Array.from({ length: 12 - logs.length }).map((_, idx) => (
+                            <tr key={`empty-${idx}`} className="h-[66px] bg-transparent pointer-events-none border-b border-[rgba(0,0,0,0.02)]">
+                                <td className="px-6 py-4"></td>
+                                <td className="px-6 py-4"></td>
+                                <td className="px-6 py-4"></td>
+                                <td className="px-6 py-4"></td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
