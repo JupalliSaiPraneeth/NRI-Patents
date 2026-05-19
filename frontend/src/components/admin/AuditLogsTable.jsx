@@ -8,7 +8,7 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_8px_40px_rgba(0,0,0,0.08)] flex flex-col h-[620px] overflow-hidden relative z-10 w-full"
+            className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_8px_40px_rgba(0,0,0,0.08)] flex flex-col flex-1 h-full overflow-hidden relative z-10 w-full"
         >
             <div className="p-6 border-b border-[rgba(0,0,0,0.07)] flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#f4f4f0]/50">
                 <div className="flex items-center gap-3">
@@ -30,7 +30,7 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
                 </button>
             </div>
 
-            <div className="flex-1 overflow-x-auto bg-white">
+            <div className="flex-1 overflow-auto bg-white max-h-[500px]">
                 <table className="w-full text-left border-collapse">
                     <thead className="sticky top-0 z-20">
                         <tr style={{ background: 'linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%)' }}>
