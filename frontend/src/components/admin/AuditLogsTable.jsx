@@ -72,14 +72,14 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
                                         <td className="px-6 py-4 align-top relative">
                                             <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[#b20e0e] opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border ${isDanger ? 'bg-[rgba(178,14,14,0.1)] text-[#b20e0e] border-[rgba(178,14,14,0.2)]' :
-                                                    isSuccess ? 'bg-[rgba(22,163,74,0.1)] text-[#16a34a] border-[rgba(22,163,74,0.2)]' :
-                                                        isWarning ? 'bg-[rgba(217,119,6,0.1)] text-[#d97706] border-[rgba(217,119,6,0.2)]' :
-                                                            'bg-[rgba(0,0,0,0.04)] text-[#1a1a1a] border-[rgba(0,0,0,0.1)]'
+                                                isSuccess ? 'bg-[rgba(22,163,74,0.1)] text-[#16a34a] border-[rgba(22,163,74,0.2)]' :
+                                                    isWarning ? 'bg-[rgba(217,119,6,0.1)] text-[#d97706] border-[rgba(217,119,6,0.2)]' :
+                                                        'bg-[rgba(0,0,0,0.04)] text-[#1a1a1a] border-[rgba(0,0,0,0.1)]'
                                                 }`}>
                                                 <span className={`w-1.5 h-1.5 rounded-full ${isDanger ? 'bg-[#b20e0e]' :
-                                                        isSuccess ? 'bg-[#16a34a]' :
-                                                            isWarning ? 'bg-[#d97706]' :
-                                                                'bg-[#1a1a1a]'
+                                                    isSuccess ? 'bg-[#16a34a]' :
+                                                        isWarning ? 'bg-[#d97706]' :
+                                                            'bg-[#1a1a1a]'
                                                     }`}></span>
                                                 {log.action}
                                             </span>
@@ -104,14 +104,6 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
                                 );
                             })
                         )}
-                        {logs.length > 0 && logs.length < 12 && Array.from({ length: 12 - logs.length }).map((_, idx) => (
-                            <tr key={`empty-${idx}`} className="h-[66px] bg-transparent pointer-events-none border-b border-[rgba(0,0,0,0.02)]">
-                                <td className="px-6 py-4"></td>
-                                <td className="px-6 py-4"></td>
-                                <td className="px-6 py-4"></td>
-                                <td className="px-6 py-4"></td>
-                            </tr>
-                        ))}
                     </tbody>
                 </table>
             </div>

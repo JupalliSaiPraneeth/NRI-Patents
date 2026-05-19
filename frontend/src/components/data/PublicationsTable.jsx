@@ -875,6 +875,21 @@ const PublicationsTable = ({
                     </tr>
                   );
                 })}
+                {pageData.length > 0 && pageData.length < rowsPerPage && Array.from({ length: rowsPerPage - pageData.length }).map((_, idx) => {
+                  const rowIndex = pageData.length + idx;
+                  return (
+                    <tr key={`empty-${idx}`} className="pointer-events-none"
+                      style={{
+                        height: '48px',
+                        background: rowIndex % 2 === 0 ? 'white' : 'rgba(248,248,250,0.8)',
+                        borderBottom: '1px solid rgba(0,0,0,0.04)'
+                      }}>
+                      <td></td>
+                      {COLUMNS.map(col => <td key={col.key}></td>)}
+                      {showActions && (isAuthenticated || isAdmin) && <td></td>}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
