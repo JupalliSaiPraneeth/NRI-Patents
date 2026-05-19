@@ -357,7 +357,7 @@ const Home = () => {
         <div
           ref={flipWrapperRef}
           className="relative w-full overflow-hidden"
-          style={{ height: isMobile ? 'auto' : '100vh', minHeight: isMobile ? 'auto' : '1150px' }}
+          style={{ height: isMobile ? 'auto' : '100vh', minHeight: isMobile ? 'auto' : '1010px' }}
         >
           {/* ── Mid-flip background — NRI logo fills the entire viewport as bg ── */}
           <div
@@ -666,7 +666,7 @@ const Home = () => {
                     </div>
                   </div>
 
-                  <div className="table-reveal min-h-[800px] pb-28">
+                  <div className="table-reveal min-h-[700px] pb-8">
                     <PublicationsTable showActions={false} />
                   </div>
                 </div>
