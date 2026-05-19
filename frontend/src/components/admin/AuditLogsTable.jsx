@@ -30,7 +30,7 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
                 </button>
             </div>
 
-            <div className="flex-1 overflow-auto bg-white max-h-[500px]">
+            <div className="flex-1 overflow-auto bg-white max-h-[750px]">
                 <table className="w-full text-left border-collapse">
                     <thead className="sticky top-0 z-20">
                         <tr style={{ background: 'linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%)' }}>
