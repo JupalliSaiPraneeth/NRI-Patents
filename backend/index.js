@@ -104,10 +104,12 @@ app.use('/uploads', express.static(uploadsDir, {
     }
   }
 }));
-
 // Database initialization - seeding handled in db.js
 import { db, dbReady } from "./db.js";
+import { ensureBucketExists } from "./services/storageService.js";
+
 await dbReady; // Wait for database to be ready
+await ensureBucketExists(); // Ensure Supabase storage bucket exists and is public
 
 const isAllowedOrigin = (origin) => {
   if (!origin) return true;

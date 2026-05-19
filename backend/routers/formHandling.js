@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import { verifyToken } from "../middleware/verifyToken.js";
 import { requireAnyAdmin, isSuperAdmin } from "../middleware/authorization.js";
+import { uploadFileToSupabase, deleteFileFromSupabase } from "../services/storageService.js";
 import { supabase } from "../db.js";
 import ExcelJS from "exceljs";
 import path from "path";
@@ -252,9 +253,6 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
     return res.status(400).json({ message: "Proof of Publish (PDF) is required." });
   }
 
-  const finalDocumentLink = docFile ? `/uploads/proof_of_publish/${docFile.filename}` : null;
-  const finalGrantDocLink = grantFile ? `/uploads/proof_of_grant/${grantFile.filename}` : null;
-
   // Default patentType to 'Utility' if not provided (backward compatibility)
   const finalPatentType = patentType || 'Utility';
 
@@ -263,6 +261,10 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
     console.log(`[FormEntry Check] Role: ${req.user.role}, UserDept: '${req.user.department}', PayloadDept: '${department}'`);
     if (department !== req.user.department) {
       console.warn(`[FormEntry Blocked] Mismatch: '${department}' !== '${req.user.department}'`);
+      try {
+        if (docFile && fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path);
+        if (grantFile && fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path);
+      } catch (err) {}
       return res.status(403).json({
         message: `You can only add patents for your department (${req.user.department})`
       });
@@ -272,6 +274,10 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
   // Validate date requirements based on patent type
   const dateValidation = validatePatentDates(finalPatentType, filingDate, grantingDate, publishingDate);
   if (!dateValidation.valid) {
+    try {
+      if (docFile && fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path);
+      if (grantFile && fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path);
+    } catch (err) {}
     return res.status(400).json({ message: dateValidation.message });
   }
 
@@ -286,7 +292,24 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
     if (checkError) throw checkError;
 
     if (existingRows && existingRows.length > 0) {
+      try {
+        if (docFile && fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path);
+        if (grantFile && fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path);
+      } catch (err) {}
       return res.status(409).json({ message: "Duplicate entry: You have already submitted this patent." });
+    }
+
+    // Upload to Supabase Storage
+    let finalDocumentLink = null;
+    let finalGrantDocLink = null;
+
+    if (docFile) {
+      finalDocumentLink = await uploadFileToSupabase(docFile.path, docFile.filename, 'proof_of_publish');
+      try { fs.unlinkSync(docFile.path); } catch (err) {}
+    }
+    if (grantFile) {
+      finalGrantDocLink = await uploadFileToSupabase(grantFile.path, grantFile.filename, 'proof_of_grant');
+      try { fs.unlinkSync(grantFile.path); } catch (err) {}
     }
 
     const { error: insertError } = await supabase
@@ -322,11 +345,11 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
 
     // Clean up uploaded files on failure
     try {
-      if (docFile && docFile.path) {
+      if (docFile && docFile.path && fs.existsSync(docFile.path)) {
         fs.unlinkSync(docFile.path);
         console.log('Cleaned up document file after failure:', docFile.path);
       }
-      if (grantFile && grantFile.path) {
+      if (grantFile && grantFile.path && fs.existsSync(grantFile.path)) {
         fs.unlinkSync(grantFile.path);
         console.log('Cleaned up grant file after failure:', grantFile.path);
       }
@@ -592,6 +615,10 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
     // Validate date requirements based on patent type
     const dateValidation = validatePatentDates(finalPatentType, filingDate, grantingDate, publishingDate);
     if (!dateValidation.valid) {
+      try {
+        if (docFile && fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path);
+        if (grantFile && fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path);
+      } catch (err) {}
       return res.status(400).json({ message: dateValidation.message });
     }
 
@@ -599,14 +626,23 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
     const docFile = req.files?.documentFile?.[0];
     let finalDocumentLink = entry.documentlink;
     if (docFile) {
-      finalDocumentLink = `/uploads/proof_of_publish/${docFile.filename}`;
       try {
-        if (entry.documentlink?.startsWith('/uploads/')) {
-          const oldPath = path.join(__dirname, '..', entry.documentlink.replace(/^\/+/, ''));
-          await fs.promises.unlink(oldPath).catch(() => { });
+        finalDocumentLink = await uploadFileToSupabase(docFile.path, docFile.filename, 'proof_of_publish');
+        try { fs.unlinkSync(docFile.path); } catch (err) {}
+        
+        // Remove old file from Supabase or local disk
+        if (entry.documentlink) {
+          if (entry.documentlink.includes('/storage/v1/object/public/patents/')) {
+            await deleteFileFromSupabase(entry.documentlink);
+          } else if (entry.documentlink.startsWith('/uploads/')) {
+            const oldPath = path.join(__dirname, '..', entry.documentlink.replace(/^\/+/, ''));
+            await fs.promises.unlink(oldPath).catch(() => { });
+          }
         }
       } catch (err) {
-        console.error('Failed to remove old published doc:', err);
+        console.error('Failed to handle new published doc upload:', err);
+        try { if (fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path); } catch (e) {}
+        throw err;
       }
     }
 
@@ -614,14 +650,23 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
     const grantFile = req.files?.grantDocumentFile?.[0];
     let finalGrantDocLink = entry.grantdocumentlink;
     if (grantFile) {
-      finalGrantDocLink = `/uploads/proof_of_grant/${grantFile.filename}`;
       try {
-        if (entry.grantdocumentlink?.startsWith('/uploads/')) {
-          const oldPath = path.join(__dirname, '..', entry.grantdocumentlink.replace(/^\/+/, ''));
-          await fs.promises.unlink(oldPath).catch(() => { });
+        finalGrantDocLink = await uploadFileToSupabase(grantFile.path, grantFile.filename, 'proof_of_grant');
+        try { fs.unlinkSync(grantFile.path); } catch (err) {}
+
+        // Remove old file from Supabase or local disk
+        if (entry.grantdocumentlink) {
+          if (entry.grantdocumentlink.includes('/storage/v1/object/public/patents/')) {
+            await deleteFileFromSupabase(entry.grantdocumentlink);
+          } else if (entry.grantdocumentlink.startsWith('/uploads/')) {
+            const oldPath = path.join(__dirname, '..', entry.grantdocumentlink.replace(/^\/+/, ''));
+            await fs.promises.unlink(oldPath).catch(() => { });
+          }
         }
       } catch (err) {
-        console.error('Failed to remove old grant doc:', err);
+        console.error('Failed to handle new grant doc upload:', err);
+        try { if (fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path); } catch (e) {}
+        throw err;
       }
     }
 
@@ -688,13 +733,21 @@ router.delete("/deleteEntry/:id", verifyToken, requireAnyAdmin, async (req, res)
 
     // Delete files
     try {
-      if (entry.documentlink?.startsWith('/uploads/')) {
-        const filePath = path.join(__dirname, '..', entry.documentlink.replace(/^\/+/, ''));
-        if (fs.existsSync(filePath)) await fs.promises.unlink(filePath);
+      if (entry.documentlink) {
+        if (entry.documentlink.includes('/storage/v1/object/public/patents/')) {
+          await deleteFileFromSupabase(entry.documentlink);
+        } else if (entry.documentlink.startsWith('/uploads/')) {
+          const filePath = path.join(__dirname, '..', entry.documentlink.replace(/^\/+/, ''));
+          if (fs.existsSync(filePath)) await fs.promises.unlink(filePath);
+        }
       }
-      if (entry.grantdocumentlink?.startsWith('/uploads/')) {
-        const filePath = path.join(__dirname, '..', entry.grantdocumentlink.replace(/^\/+/, ''));
-        if (fs.existsSync(filePath)) await fs.promises.unlink(filePath);
+      if (entry.grantdocumentlink) {
+        if (entry.grantdocumentlink.includes('/storage/v1/object/public/patents/')) {
+          await deleteFileFromSupabase(entry.grantdocumentlink);
+        } else if (entry.grantdocumentlink.startsWith('/uploads/')) {
+          const filePath = path.join(__dirname, '..', entry.grantdocumentlink.replace(/^\/+/, ''));
+          if (fs.existsSync(filePath)) await fs.promises.unlink(filePath);
+        }
       }
     } catch (err) {
       console.error('File delete failed:', err);

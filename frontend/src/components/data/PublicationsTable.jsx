@@ -247,8 +247,13 @@ const PatentPreviewModal = ({ patent, onClose }) => {
   const [activeTab, setActiveTab] = useState('publish'); // 'publish' or 'grant'
 
   const baseUrl = getBaseUrl();
-  const publishUrl = patent.documentLink ? `${baseUrl}${patent.documentLink}` : null;
-  const grantUrl = patent.grantDocumentLink ? `${baseUrl}${patent.grantDocumentLink}` : null;
+  const getFullUrl = (link) => {
+    if (!link) return null;
+    if (link.startsWith('http://') || link.startsWith('https://')) return link;
+    return `${baseUrl}${link}`;
+  };
+  const publishUrl = getFullUrl(patent.documentLink);
+  const grantUrl = getFullUrl(patent.grantDocumentLink);
   const currentPdfUrl = activeTab === 'publish' ? publishUrl : grantUrl;
 
   useEffect(() => {
