@@ -760,7 +760,7 @@ const PublicationsTable = ({
             onMouseLeave={handleMouseLeave}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
-            className={`overflow-auto custom-scrollbar ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+            className={`overflow-x-auto custom-scrollbar ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
             style={{ WebkitOverflowScrolling: 'touch', maxHeight: '600px' }}>
 
             <table className="border-collapse" style={{ tableLayout: 'fixed', width: `${totalWidth}px` }}>
