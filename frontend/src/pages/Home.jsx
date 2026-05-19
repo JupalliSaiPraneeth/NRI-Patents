@@ -545,22 +545,20 @@ const Home = () => {
                       </div>
 
                       {!isAuthenticated && (
-                        <div className="relative hero-cta-secondary">
-                          <button
-                            onClick={() => setIsLoginOpen(true)}
-                            className="w-full sm:w-auto px-10 py-5 text-white rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all duration-300 hover:-translate-y-1 hover:bg-white/20"
-                            style={{
-                              background: 'rgba(255,255,255,0.1)',
-                              border: '1.5px solid rgba(255,255,255,0.25)',
-                              backdropFilter: 'blur(16px)',
-                              boxShadow:
-                                '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
-                            }}
-                          >
-                            <LogIn size={20} />
-                            Faculty Login
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => setIsLoginOpen(true)}
+                          className="relative z-50 hero-cta-secondary w-full sm:w-auto px-10 py-5 text-white rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all duration-300 hover:-translate-y-1 hover:bg-white/20"
+                          style={{
+                            background: 'rgba(255,255,255,0.1)',
+                            border: '1.5px solid rgba(255,255,255,0.25)',
+                            backdropFilter: 'blur(16px)',
+                            boxShadow:
+                              '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
+                          }}
+                        >
+                          <LogIn size={20} />
+                          Faculty Login
+                        </button>
                       )}
                     </div>
 
