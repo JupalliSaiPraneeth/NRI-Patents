@@ -119,7 +119,7 @@ const AdminPage = () => {
     const fetchLogs = async (page = 1, withAnimation = false) => {
         try {
             if (withAnimation) setIsRefreshing(true);
-            const response = await api.get(`/admin/logs?page=${page}&limit=14`);
+            const response = await api.get(`/admin/logs?page=${page}&limit=16`);
             setLogs(response.data.logs);
             setTotalPages(response.data.totalPages);
             setLogPage(page);
