@@ -152,8 +152,8 @@ const Home = () => {
     // Initial 3D card states — VERTICAL flip uses rotateX
     // heroCard  starts flat (rotateX: 0)
     // tableCard starts flipped upward behind (rotateX: -180)
-    gsap.set(heroCardRef.current, { rotateX: 0, transformOrigin: 'center center', visibility: 'visible', opacity: 1 });
-    gsap.set(tableCardRef.current, { rotateX: -180, transformOrigin: 'center center', visibility: 'hidden', opacity: 0 });
+    gsap.set(heroCardRef.current, { rotateX: 0, transformOrigin: 'center center', visibility: 'visible', opacity: 1, pointerEvents: 'auto' });
+    gsap.set(tableCardRef.current, { rotateX: -180, transformOrigin: 'center center', visibility: 'hidden', opacity: 0, pointerEvents: 'none' });
     // Perspective on the scene for depth
     gsap.set(flipSceneRef.current, { perspective: 1200 });
 
@@ -633,6 +633,7 @@ const Home = () => {
                 transformStyle: 'preserve-3d',
                 willChange: 'transform',
                 background: '#f4f4f0',
+                pointerEvents: 'none',
               }}
             >
               {/* Accent line at top — part of the "flip landed" reveal */}

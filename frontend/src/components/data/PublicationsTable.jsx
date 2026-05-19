@@ -468,8 +468,8 @@ const PatentPreviewModal = ({ patent, onClose }) => {
                   onClick={() => setActiveTab('publish')}
                   disabled={!publishUrl}
                   className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${activeTab === 'publish'
-                      ? 'bg-white text-slate-900 shadow-sm'
-                      : 'text-slate-500 hover:text-slate-800 disabled:opacity-40 disabled:cursor-not-allowed'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-800 disabled:opacity-40 disabled:cursor-not-allowed'
                     }`}
                 >
                   Proof of Publication
@@ -478,8 +478,8 @@ const PatentPreviewModal = ({ patent, onClose }) => {
                   onClick={() => setActiveTab('grant')}
                   disabled={!grantUrl}
                   className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${activeTab === 'grant'
-                      ? 'bg-white text-slate-900 shadow-sm'
-                      : 'text-slate-500 hover:text-slate-800 disabled:opacity-40 disabled:cursor-not-allowed'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-800 disabled:opacity-40 disabled:cursor-not-allowed'
                     }`}
                 >
                   Proof of Grant

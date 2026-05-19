@@ -116,7 +116,7 @@ const storage = multer.diskStorage({
     // Format: [Patent ID]_[User Email]_[Type].pdf
     // Append a tiny random string if needed, but uniqueness is naturally guaranteed per user per patent.
     const finalName = `${safePatentId}_${cleanEmail}_${typeLabel}.pdf`;
-    
+
     cb(null, finalName);
   }
 });
@@ -264,7 +264,7 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
       try {
         if (docFile && fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path);
         if (grantFile && fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path);
-      } catch (err) {}
+      } catch (err) { }
       return res.status(403).json({
         message: `You can only add patents for your department (${req.user.department})`
       });
@@ -277,7 +277,7 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
     try {
       if (docFile && fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path);
       if (grantFile && fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path);
-    } catch (err) {}
+    } catch (err) { }
     return res.status(400).json({ message: dateValidation.message });
   }
 
@@ -288,14 +288,14 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
       .select('id')
       .eq('patentid', patentId)
       .eq('email', email);
-    
+
     if (checkError) throw checkError;
 
     if (existingRows && existingRows.length > 0) {
       try {
         if (docFile && fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path);
         if (grantFile && fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path);
-      } catch (err) {}
+      } catch (err) { }
       return res.status(409).json({ message: "Duplicate entry: You have already submitted this patent." });
     }
 
@@ -305,11 +305,11 @@ router.post("/formEntry", verifyToken, requireAnyAdmin, uploadFields, async (req
 
     if (docFile) {
       finalDocumentLink = await uploadFileToSupabase(docFile.path, docFile.filename, 'proof_of_publish');
-      try { fs.unlinkSync(docFile.path); } catch (err) {}
+      try { fs.unlinkSync(docFile.path); } catch (err) { }
     }
     if (grantFile) {
       finalGrantDocLink = await uploadFileToSupabase(grantFile.path, grantFile.filename, 'proof_of_grant');
-      try { fs.unlinkSync(grantFile.path); } catch (err) {}
+      try { fs.unlinkSync(grantFile.path); } catch (err) { }
     }
 
     const { error: insertError } = await supabase
@@ -431,7 +431,7 @@ router.post("/bulkImport", verifyToken, requireAnyAdmin, async (req, res) => {
         .select('id')
         .eq('patentid', patentId)
         .eq('email', email);
-      
+
       if (checkError) throw checkError;
 
       if (existingRows && existingRows.length > 0) {
@@ -592,7 +592,7 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
       .from('patents')
       .select('email, documentlink, grantdocumentlink, patenttype, department')
       .eq('id', id);
-    
+
     if (fetchError) throw fetchError;
     const entry = entries?.[0];
 
@@ -618,7 +618,7 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
       try {
         if (docFile && fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path);
         if (grantFile && fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path);
-      } catch (err) {}
+      } catch (err) { }
       return res.status(400).json({ message: dateValidation.message });
     }
 
@@ -628,8 +628,8 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
     if (docFile) {
       try {
         finalDocumentLink = await uploadFileToSupabase(docFile.path, docFile.filename, 'proof_of_publish');
-        try { fs.unlinkSync(docFile.path); } catch (err) {}
-        
+        try { fs.unlinkSync(docFile.path); } catch (err) { }
+
         // Remove old file from Supabase or local disk
         if (entry.documentlink) {
           if (entry.documentlink.includes('/storage/v1/object/public/patents/')) {
@@ -641,7 +641,7 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
         }
       } catch (err) {
         console.error('Failed to handle new published doc upload:', err);
-        try { if (fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path); } catch (e) {}
+        try { if (fs.existsSync(docFile.path)) fs.unlinkSync(docFile.path); } catch (e) { }
         throw err;
       }
     }
@@ -652,7 +652,7 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
     if (grantFile) {
       try {
         finalGrantDocLink = await uploadFileToSupabase(grantFile.path, grantFile.filename, 'proof_of_grant');
-        try { fs.unlinkSync(grantFile.path); } catch (err) {}
+        try { fs.unlinkSync(grantFile.path); } catch (err) { }
 
         // Remove old file from Supabase or local disk
         if (entry.grantdocumentlink) {
@@ -665,7 +665,7 @@ router.put("/formEntryUpdate", verifyToken, requireAnyAdmin, uploadFields, async
         }
       } catch (err) {
         console.error('Failed to handle new grant doc upload:', err);
-        try { if (fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path); } catch (e) {}
+        try { if (fs.existsSync(grantFile.path)) fs.unlinkSync(grantFile.path); } catch (e) { }
         throw err;
       }
     }
@@ -716,7 +716,7 @@ router.delete("/deleteEntry/:id", verifyToken, requireAnyAdmin, async (req, res)
       .from('patents')
       .select('email, documentlink, grantdocumentlink, department')
       .eq('id', id);
-    
+
     if (fetchError) throw fetchError;
     const entry = entries?.[0];
 
@@ -780,10 +780,10 @@ router.get("/formGet", async (req, res) => {
 
     const page = pageParam ? parseInt(pageParam, 10) : null;
     const limit = limitParam ? parseInt(limitParam, 10) : null;
-    
+
     let filters = {};
     if (filtersParam) {
-      try { filters = JSON.parse(filtersParam); } catch (e) {}
+      try { filters = JSON.parse(filtersParam); } catch (e) { }
     }
 
     let user = null;
@@ -792,7 +792,7 @@ router.get("/formGet", async (req, res) => {
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         user = decoded;
-      } catch (err) {}
+      } catch (err) { }
     }
 
     const allowedColumns = ['facultyName', 'email', 'department', 'designation', 'caste', 'patentId', 'patentTitle', 'authors', 'coApplicants', 'patentType', 'approvalType', 'filingDate', 'publishingDate', 'grantingDate'];
@@ -821,7 +821,7 @@ router.get("/formGet", async (req, res) => {
     if (page && limit && page > 0 && limit > 0) {
       const from = (page - 1) * limit;
       const to = from + limit - 1;
-      
+
       const { data: rows, count, error } = await query.range(from, to);
       if (error) throw error;
 
