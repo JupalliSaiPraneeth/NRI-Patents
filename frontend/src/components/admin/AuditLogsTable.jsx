@@ -8,7 +8,7 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_8px_40px_rgba(0,0,0,0.08)] flex flex-col flex-1 h-full max-h-[820px] overflow-hidden relative z-10 w-full"
+            className="bg-white rounded-2xl border border-[rgba(0,0,0,0.07)] shadow-[0_8px_40px_rgba(0,0,0,0.08)] flex flex-col flex-1 h-full overflow-hidden relative z-10 w-full"
         >
             <div className="p-6 border-b border-[rgba(0,0,0,0.07)] flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#f4f4f0]/50">
                 <div className="flex items-center gap-3">
@@ -30,7 +30,7 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
                 </button>
             </div>
 
-            <div className="flex-1 overflow-auto bg-white">
+            <div className="flex-1 overflow-auto bg-white max-h-[750px]">
                 <table className="w-full text-left border-collapse">
                     <thead className="sticky top-0 z-20">
                         <tr style={{ background: 'linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%)' }}>
@@ -57,54 +57,52 @@ const AuditLogsTable = ({ logs, fetchLogs, logPage, totalPages, isRefreshing }) 
                                 const isDanger = log.action === 'DELETE' || log.action === 'DELETE_ALL';
                                 const isSuccess = log.action === 'CREATE' || log.action.includes('CREATE');
                                 const isWarning = log.action === 'UPDATE' || log.action === 'BATCH_UPDATE' || log.action.includes('UPDATE') || log.action.includes('PASSWORD');
-                                
+
                                 return (
-                                <motion.tr
-                                    key={log.id}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.03 }}
-                                    className="hover:bg-[linear-gradient(90deg,rgba(178,14,14,0.04)_0%,rgba(178,14,14,0.01)_100%)] transition-colors group relative"
-                                    style={{ transform: 'translateX(0)', transition: 'transform 0.2s ease, background 0.15s ease' }}
-                                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(3px)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
-                                >
-                                    <td className="px-6 py-4 align-top relative">
-                                        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[#b20e0e] opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border ${
-                                            isDanger ? 'bg-[rgba(178,14,14,0.1)] text-[#b20e0e] border-[rgba(178,14,14,0.2)]' :
-                                            isSuccess ? 'bg-[rgba(22,163,74,0.1)] text-[#16a34a] border-[rgba(22,163,74,0.2)]' :
-                                            isWarning ? 'bg-[rgba(217,119,6,0.1)] text-[#d97706] border-[rgba(217,119,6,0.2)]' :
-                                            'bg-[rgba(0,0,0,0.04)] text-[#1a1a1a] border-[rgba(0,0,0,0.1)]'
-                                            }`}>
-                                            <span className={`w-1.5 h-1.5 rounded-full ${
-                                                isDanger ? 'bg-[#b20e0e]' :
-                                                isSuccess ? 'bg-[#16a34a]' :
-                                                isWarning ? 'bg-[#d97706]' :
-                                                'bg-[#1a1a1a]'
-                                                }`}></span>
-                                            {log.action}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 align-top">
-                                        <div className="flex items-center gap-2.5">
-                                            <div className="w-8 h-8 rounded-xl bg-[#f4f4f0] border border-[rgba(0,0,0,0.1)] flex items-center justify-center text-[10px] font-black text-[#1a1a1a] shadow-sm">
-                                                {log.user_email?.charAt(0).toUpperCase()}
+                                    <motion.tr
+                                        key={log.id}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.03 }}
+                                        className="hover:bg-[linear-gradient(90deg,rgba(178,14,14,0.04)_0%,rgba(178,14,14,0.01)_100%)] transition-colors group relative"
+                                        style={{ transform: 'translateX(0)', transition: 'transform 0.2s ease, background 0.15s ease' }}
+                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(3px)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
+                                    >
+                                        <td className="px-6 py-4 align-top relative">
+                                            <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[#b20e0e] opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border ${isDanger ? 'bg-[rgba(178,14,14,0.1)] text-[#b20e0e] border-[rgba(178,14,14,0.2)]' :
+                                                    isSuccess ? 'bg-[rgba(22,163,74,0.1)] text-[#16a34a] border-[rgba(22,163,74,0.2)]' :
+                                                        isWarning ? 'bg-[rgba(217,119,6,0.1)] text-[#d97706] border-[rgba(217,119,6,0.2)]' :
+                                                            'bg-[rgba(0,0,0,0.04)] text-[#1a1a1a] border-[rgba(0,0,0,0.1)]'
+                                                }`}>
+                                                <span className={`w-1.5 h-1.5 rounded-full ${isDanger ? 'bg-[#b20e0e]' :
+                                                        isSuccess ? 'bg-[#16a34a]' :
+                                                            isWarning ? 'bg-[#d97706]' :
+                                                                'bg-[#1a1a1a]'
+                                                    }`}></span>
+                                                {log.action}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 align-top">
+                                            <div className="flex items-center gap-2.5">
+                                                <div className="w-8 h-8 rounded-xl bg-[#f4f4f0] border border-[rgba(0,0,0,0.1)] flex items-center justify-center text-[10px] font-black text-[#1a1a1a] shadow-sm">
+                                                    {log.user_email?.charAt(0).toUpperCase()}
+                                                </div>
+                                                <span className="text-sm font-bold text-[#1a1a1a]">{log.user_email}</span>
                                             </div>
-                                            <span className="text-sm font-bold text-[#1a1a1a]">{log.user_email}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm font-medium text-slate-600 leading-relaxed">
-                                        {log.details}
-                                    </td>
-                                    <td className="px-6 py-4 text-xs font-bold text-slate-500 text-right whitespace-nowrap">
-                                        {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        <br />
-                                        <span className="opacity-75">{new Date(log.timestamp).toLocaleDateString()}</span>
-                                    </td>
-                                </motion.tr>
-                            );
-                        })
+                                        </td>
+                                        <td className="px-6 py-4 text-sm font-medium text-slate-600 leading-relaxed">
+                                            {log.details}
+                                        </td>
+                                        <td className="px-6 py-4 text-xs font-bold text-slate-500 text-right whitespace-nowrap">
+                                            {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            <br />
+                                            <span className="opacity-75">{new Date(log.timestamp).toLocaleDateString()}</span>
+                                        </td>
+                                    </motion.tr>
+                                );
+                            })
                         )}
                     </tbody>
                 </table>
