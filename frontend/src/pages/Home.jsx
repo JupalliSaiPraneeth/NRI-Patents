@@ -356,8 +356,8 @@ const Home = () => {
         */}
         <div
           ref={flipWrapperRef}
-          className={isMobile ? "relative w-full" : "relative w-full overflow-hidden"}
-          style={{ height: isMobile ? 'auto' : '100vh' }}
+          className="relative w-full overflow-hidden"
+          style={{ height: isMobile ? 'auto' : '100vh', minHeight: isMobile ? 'auto' : '1150px' }}
         >
           {/* ── Mid-flip background — NRI logo fills the entire viewport as bg ── */}
           <div
