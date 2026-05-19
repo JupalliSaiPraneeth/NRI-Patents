@@ -677,8 +677,7 @@ const Home = () => {
         </div>{/* /flipWrapper */}
       </main>
 
-      {/* Dynamic bottom spacer to push black footer down and blend with card background */}
-      <div className="h-28 bg-[#f4f4f0] w-full" />
+
 
       <Footer />
 
